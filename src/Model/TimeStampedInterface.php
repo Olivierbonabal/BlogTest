@@ -2,7 +2,7 @@
 
 namespace App\Model;
 
-interface TimeStampedInterface
+interface TimestampedInterface
 {
     public function getCreatedAt(): ?\DateTimeInterface;
 

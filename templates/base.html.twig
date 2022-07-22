@@ -1,12 +1,11 @@
 <!DOCTYPE html>
-<html>
+<html lang="fr">
 	<head>
 		<meta charset="UTF-8">
 		<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>🦍</text></svg>">
 
-		<title>
-			{% block title %}Welcome!
-			{% endblock %}
+		<title>BlogTest
+			{% block title %}{% endblock %}
 		</title>
 
 		{% block stylesheets %}
@@ -28,7 +27,7 @@
 					</a>
 					<ul class="dropdown-menu" aria-labelledby="dropdownMenuButtonAdminDashboard">
 						<li>
-							<a class="dropdown-item" href="#">Tableau de Bord</a>
+							<a class="dropdown-item" href="{{ path ('admin') }}">Tableau de Bord</a>
 						</li>
 						<li>
 							<a class="dropdown-item" href="#">Menu</a>
@@ -88,7 +87,6 @@
 				</div>
 			</footer>
 		</div>
-
 
 	</body>
 </html>

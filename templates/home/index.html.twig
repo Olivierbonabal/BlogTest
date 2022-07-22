@@ -1,7 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello HomeController!
-{% endblock %}
+{% block title %}Accueil{% endblock %}
 
 {% block body %}
 
@@ -10,6 +9,9 @@
 
 			<div class="col-md-8">
 				<h3 class="pb-4 mb-4 fst-italic border-bottom">Articles Récents</h3>
+				<div id="article-list">
+                    {% include 'article/list.html.twig' with { articles } %}
+                </div>
 			</div>
 
 			<div class="col-md-4">

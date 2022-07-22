@@ -127,18 +127,6 @@ class Article implements TimestampedInterface
         return $this;
     }
 
-    public function getCategory(): ?Category
-    {
-        return $this->category;
-    }
-
-    public function setCategory(?Category $category): self
-    {
-        $this->category = $category;
-
-        return $this;
-    }
-
     /**
      * @return Collection<int, Comment>
      */
@@ -177,6 +165,26 @@ class Article implements TimestampedInterface
     public function setFeaturedImage(?Media $featuredImage): self
     {
         $this->featuredImage = $featuredImage;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of categories
+     */ 
+    public function getCategories()
+    {
+        return $this->categories;
+    }
+
+    /**
+     * Set the value of categories
+     *
+     * @return  self
+     */ 
+    public function setCategories($categories)
+    {
+        $this->categories = $categories;
 
         return $this;
     }

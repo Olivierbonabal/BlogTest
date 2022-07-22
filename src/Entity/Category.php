@@ -24,7 +24,7 @@ class Category
     #[ORM\Column(length: 10)]
     private ?string $color = null;
 
-    #[ORM\OneToMany(mappedBy: 'category', targetEntity: Article::class)]
+    #[ORM\ManyToMany(mappedBy: 'categories', targetEntity: Article::class)]
     private Collection $articles;
 
     public function __construct()
@@ -85,7 +85,7 @@ class Category
     {
         if (!$this->articles->contains($article)) {
             $this->articles[] = $article;
-            $article->setCategory($this);
+            $article->setCategories($this);
         }
 
         return $this;
@@ -95,11 +95,16 @@ class Category
     {
         if ($this->articles->removeElement($article)) {
             // set the owning side to null (unless already changed)
-            if ($article->getCategory() === $this) {
-                $article->setCategory(null);
+            if ($article->getCategories() === $this) {
+                $article->setCategories(null);
             }
         }
 
         return $this;
+    }
+
+    public function __toString(): string
+    {
+         return $this->name;
     }
 }

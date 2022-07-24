@@ -2,17 +2,62 @@
 
 namespace App\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Entity\Comment;
+use App\Repository\UserRepository;
+use App\Repository\ArticleRepository;
+use App\Repository\CommentRepository;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
+//envoie commentaires en Ajax (la page sans recharge le commentaire apparait)
 class CommentController extends AbstractController
 {
-    #[Route('/comment', name: 'app_comment')]
-    public function index(): Response
+    #[Route('/ajax/comments', name: 'comment_add', methods: 'POST')]
+    public function addComment(Request $request, ArticleRepository $articleRepo, CommentRepository $commentRepo, UserRepository $userRepo, EntityManagerInterface $em): Response
     {
-        return $this->render('comment/index.html.twig', [
-            'controller_name' => 'CommentController',
+        //on recupere la commande form
+        $commentData = $request->request->all('comment');
+
+        // dd($commentData);
+        if (!$this->isCsrfTokenValid('comment-add', $commentData['_token'])) {
+            return $this->json(
+                [
+                    'code' => 'INVALID_CSRF_TOKEN'
+                ],
+                Response::HTTP_BAD_REQUEST
+            );
+        }
+
+        $article = $articleRepo->findByOne(['id' => $commentData['article']]);
+
+        if (!$article) {
+            return $this->json(
+                [
+                    'code' => 'ARTICLE_NOT_FOUND'
+                ],
+                Response::HTTP_BAD_REQUEST
+            );
+        }
+
+        $comment = new Comment($article);
+        $comment->setContent($commentData['content']);
+        $comment->setUser($userRepo->findOneBy(['id' => 1]));
+        $comment->setCreatedAt(new \DateTime());
+
+        $em->persist($comment);
+        $em->flush();
+
+        $html = $this->renderView('comment/index.html.twig', [
+            'comment' => $comment
+        ]);
+
+        return $this->json([
+            'code' => 'COMMENT_ADDED_SUCCESSFULLY',
+            'message' => $html,
+            'numberOfComments' => $commentRepo->count(['article' => $article])
         ]);
     }
 }

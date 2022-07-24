@@ -171,7 +171,7 @@ class Article implements TimestampedInterface
 
     /**
      * Get the value of categories
-     */ 
+     */
     public function getCategories()
     {
         return $this->categories;
@@ -181,11 +181,16 @@ class Article implements TimestampedInterface
      * Set the value of categories
      *
      * @return  self
-     */ 
+     */
     public function setCategories($categories)
     {
         $this->categories = $categories;
 
         return $this;
+    }
+
+    public function __toString()
+    {
+        return $this->title;
     }
 }
